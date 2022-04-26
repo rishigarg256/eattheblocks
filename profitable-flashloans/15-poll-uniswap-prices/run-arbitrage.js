@@ -1,6 +1,6 @@
 require('dotenv').config()
 const Web3 = require('web3');
-const { ChainId, Token, TokenAmount, Pair } = require('@uniswap/sdk');
+const { ChainId, Token, TokenAmount, Pair, Fetcher } = require('@uniswap/sdk');
 const abis = require('./abis');
 const { mainnet: addresses } = require('./addresses');
 
@@ -21,12 +21,12 @@ const AMOUNT_DAI_WEI = web3.utils.toWei((AMOUNT_ETH * RECENT_ETH_PRICE).toString
 const init = async () => {
   const [dai, weth] = await Promise.all(
     [addresses.tokens.dai, addresses.tokens.weth].map(tokenAddress => (
-      Token.fetchData(
+      Fetcher.fetchTokenData(
         ChainId.MAINNET,
         tokenAddress,
       )
   )));
-  const daiWeth = await Pair.fetchData(
+  const daiWeth = await Fetcher.fetchPairData(
     dai,
     weth
   );
